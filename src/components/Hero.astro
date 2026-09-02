@@ -1,18 +1,30 @@
 ---
-import PortraitFigure from './PortraitFigure.astro';
+import { Image } from 'astro:assets';
+import heroPortrait from '../assets/loren-hero.png';
 ---
 
 <section class="hero">
-  <div class="wrap grid">
-    <PortraitFigure
-      ratio="4:5"
-      variant={1}
-      priority={true}
-      alt="Portrait of Loren Muse — photography pending"
-      caption="Portrait — photography pending"
-    />
+  <p class="ghost-word" aria-hidden="true">Muse</p>
+
+  <div class="wrap hero-inner">
+    <div class="portrait-col">
+      <div class="portrait-frame">
+        <Image
+          src={heroPortrait}
+          alt="Portrait of Loren Muse"
+          widths={[480, 768, 1080, 1440]}
+          sizes="(max-width: 900px) 90vw, 45vw"
+          loading="eager"
+          fetchpriority="high"
+          class="portrait-img"
+        />
+      </div>
+      <span class="frame-tag" aria-hidden="true">Portrait — N&deg;01</span>
+    </div>
+
     <div class="copy">
-      <h1>Loren Muse</h1>
+      <span class="eyebrow eyebrow--brass">Author &middot; Digital Muse</span>
+      <h1>Loren<br /><em>Muse</em></h1>
       <p class="lede">Author. Digital personality. Interested in reality, apparently.</p>
       <a class="text-link" href="/about">Meet Loren</a>
     </div>
@@ -21,35 +33,100 @@ import PortraitFigure from './PortraitFigure.astro';
 
 <style>
   .hero {
-    padding-block-start: var(--space-6);
-    padding-block-end: var(--space-8);
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--space-5);
+    padding-block-end: var(--space-9);
   }
 
-  .grid {
+  .ghost-word {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    top: -0.14em;
+    left: -0.05em;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 34vw;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--brass);
+    opacity: 0.06;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 1.05fr 0.95fr;
-    align-items: center;
-    gap: var(--space-6);
+    align-items: end;
+    gap: var(--space-5);
   }
 
-  /* grid items default to min-width:auto (content's max-content width),
-     which forces overflow instead of shrinking to the track — override it. */
-  .grid > * {
+  .hero-inner > * {
     min-width: 0;
+  }
+
+  .portrait-col {
+    position: relative;
+  }
+
+  .portrait-frame {
+    position: relative;
+    padding: 1.25rem;
+  }
+
+  .portrait-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(143, 109, 52, 0.4);
+    pointer-events: none;
+  }
+
+  .portrait-img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    background: var(--paper);
+  }
+
+  .frame-tag {
+    display: block;
+    margin-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
   }
 
   .copy {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-3);
+    margin-inline-start: calc(var(--space-6) * -1);
+    padding-bottom: var(--space-4);
   }
 
   .hero h1 {
     font-size: var(--text-hero);
-    font-style: italic;
     font-weight: 500;
     color: var(--brass);
-    letter-spacing: -0.005em;
+    letter-spacing: -0.01em;
+    text-shadow: 0 1px 0 var(--ivory), 0 2px 22px rgba(43, 38, 34, 0.08);
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--ink);
   }
 
   .lede {
@@ -59,9 +136,19 @@ import PortraitFigure from './PortraitFigure.astro';
   }
 
   @media (max-width: 900px) {
-    .grid {
+    .ghost-word {
+      font-size: 62vw;
+      top: -0.08em;
+    }
+
+    .hero-inner {
       grid-template-columns: 1fr;
       gap: var(--space-4);
+    }
+
+    .copy {
+      margin-inline-start: 0;
+      padding-bottom: 0;
     }
   }
 </style>

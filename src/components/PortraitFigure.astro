@@ -6,7 +6,7 @@
 // restrained abstract mark in the site's own palette, meant to read as a
 // deliberate placeholder rather than a broken image.
 interface Props {
-  ratio?: '4:5' | '1:1';
+  ratio?: '4:5' | '1:1' | '16:9';
   variant?: 1 | 2 | 3;
   alt: string;
   caption?: string;
@@ -15,7 +15,10 @@ interface Props {
 
 const { ratio = '4:5', variant = 1, alt, caption, priority = false } = Astro.props;
 
-const dims = ratio === '1:1' ? { w: 480, h: 480 } : { w: 480, h: 600 };
+const dims =
+  ratio === '1:1' ? { w: 480, h: 480 } : ratio === '16:9' ? { w: 960, h: 540 } : { w: 480, h: 600 };
+
+const aspect = ratio === '1:1' ? '1/1' : ratio === '16:9' ? '16/9' : '4/5';
 
 // three quiet variations so repeated placeholders don't look identical
 const variants = {
@@ -31,7 +34,7 @@ const v = variants[variant];
   class="portrait"
   data-temporary-asset="true"
   data-priority={priority}
-  style={`aspect-ratio:${ratio === '1:1' ? '1/1' : '4/5'}`}
+  style={`aspect-ratio:${aspect}`}
 >
   <svg
     viewBox={`0 0 ${dims.w} ${dims.h}`}

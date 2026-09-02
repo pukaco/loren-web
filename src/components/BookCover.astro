@@ -1,7 +1,7 @@
 ---
-// Temporary cover artwork for "She Lived Here, Apparently". A typographic
-// cover is a legitimate permanent style for literary fiction, but this one
-// is explicitly a placeholder — swap in the final artwork when it exists.
+import { Image } from 'astro:assets';
+import cover from '../assets/book-cover.png';
+
 interface Props {
   size?: 'compact' | 'full';
   priority?: boolean;
@@ -10,65 +10,31 @@ interface Props {
 const { size = 'full', priority = false } = Astro.props;
 ---
 
-<figure class={`cover cover--${size}`} data-temporary-asset="true" data-priority={priority}>
-  <svg
-    viewBox="0 0 400 600"
-    role="img"
-    aria-label="Cover of She Lived Here, Apparently by Loren Muse — final artwork pending"
-  >
-    <rect width="400" height="600" fill="#F2ECDF" />
-    <rect x="16" y="16" width="368" height="568" fill="none" stroke="#E7DFCD" stroke-width="1" />
-    <line x1="70" y1="220" x2="330" y2="220" stroke="#8F6D34" stroke-width="1" opacity="0.6" />
-    <text
-      x="200"
-      y="150"
-      text-anchor="middle"
-      font-family="'Bodoni Moda', Georgia, serif"
-      font-style="italic"
-      font-size="34"
-      fill="#2B2622"
-    >She Lived Here,</text>
-    <text
-      x="200"
-      y="192"
-      text-anchor="middle"
-      font-family="'Bodoni Moda', Georgia, serif"
-      font-style="italic"
-      font-size="34"
-      fill="#2B2622"
-    >Apparently</text>
-    <text
-      x="200"
-      y="470"
-      text-anchor="middle"
-      font-family="'Instrument Sans', Arial, sans-serif"
-      font-size="14"
-      letter-spacing="4"
-      fill="#8D8172"
-    >A NOVEL BY</text>
-    <text
-      x="200"
-      y="500"
-      text-anchor="middle"
-      font-family="'Instrument Sans', Arial, sans-serif"
-      font-size="17"
-      letter-spacing="3"
-      fill="#2B2622"
-    >LOREN MUSE</text>
-  </svg>
+<figure class={`cover cover--${size}`}>
+  <Image
+    src={cover}
+    alt="Cover of She Lived Here, Apparently by Loren Muse"
+    widths={[260, 380, 480, 760]}
+    sizes={size === 'compact' ? '(max-width: 720px) 170px, 230px' : '(max-width: 760px) 260px, 380px'}
+    loading={priority ? 'eager' : 'lazy'}
+    fetchpriority={priority ? 'high' : 'auto'}
+    class="cover-img"
+  />
 </figure>
 
 <style>
   .cover {
     margin: 0;
-    aspect-ratio: 2 / 3;
     background: var(--paper);
     box-shadow: 0 1px 0 var(--hairline), 0 12px 28px -18px rgba(43, 38, 34, 0.35);
   }
 
-  .cover svg {
+  .cover-img {
+    display: block;
     width: 100%;
-    height: 100%;
+    height: auto;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
   }
 
   .cover--compact {

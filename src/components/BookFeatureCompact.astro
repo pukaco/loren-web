@@ -3,13 +3,15 @@ import BookCover from './BookCover.astro';
 ---
 
 <section class="book-feature" aria-labelledby="book-feature-title">
+  <p class="ghost-number" aria-hidden="true">01</p>
+
   <div class="wrap inner">
     <div class="cover">
       <BookCover size="compact" />
     </div>
     <div class="copy">
-      <span class="rule" aria-hidden="true"></span>
-      <h2 id="book-feature-title">She Lived Here, Apparently</h2>
+      <span class="eyebrow eyebrow--brass">The Novel</span>
+      <h2 id="book-feature-title">She Lived Here,<br /><em>Apparently</em></h2>
       <p class="prose">
         A contemporary comedy about property, influencers, social media and the
         increasingly complicated business of appearing real.
@@ -21,14 +23,36 @@ import BookCover from './BookCover.astro';
 
 <style>
   .book-feature {
-    padding-block: var(--space-7);
+    position: relative;
+    overflow: hidden;
+    padding-block: var(--space-8);
     border-block: 1px solid var(--hairline);
+    background: linear-gradient(180deg, var(--paper) 0%, var(--ivory) 100%);
+  }
+
+  .ghost-number {
+    position: absolute;
+    top: 50%;
+    right: clamp(-2rem, -1vw, 2rem);
+    transform: translateY(-52%);
+    margin: 0;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-size: clamp(9rem, 6rem + 14vw, 20rem);
+    line-height: 1;
+    color: var(--brass);
+    opacity: 0.07;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
   }
 
   .inner {
+    position: relative;
+    z-index: 1;
     display: flex;
     align-items: center;
-    gap: var(--space-5);
+    gap: var(--space-6);
   }
 
   .inner > * {
@@ -36,45 +60,51 @@ import BookCover from './BookCover.astro';
   }
 
   .cover {
-    width: 150px;
+    width: 230px;
     flex: 0 0 auto;
+    transform: rotate(-2deg);
+    filter: drop-shadow(0 22px 34px rgba(43, 38, 34, 0.16));
   }
 
   .copy {
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    align-items: flex-start;
+    gap: var(--space-3);
     border-left: 1px solid var(--hairline);
-    padding-left: var(--space-5);
-  }
-
-  .rule {
-    display: block;
-    width: 2.25rem;
-    height: 1px;
-    background: var(--brass);
+    padding-left: var(--space-6);
   }
 
   .book-feature h2 {
-    font-size: var(--text-h2);
+    font-size: var(--text-h1);
+    color: var(--ink);
+  }
+
+  .book-feature h2 em {
     font-style: italic;
+    color: var(--brass);
   }
 
   .copy p {
-    font-size: var(--text-small);
+    font-size: var(--text-body);
     color: var(--ink-muted);
-    max-width: 44ch;
+    max-width: 46ch;
   }
 
-  @media (max-width: 640px) {
+  @media (max-width: 720px) {
+    .ghost-number {
+      display: none;
+    }
+
     .inner {
       flex-direction: column;
       align-items: flex-start;
-      gap: var(--space-3);
+      gap: var(--space-4);
     }
 
     .cover {
-      width: 130px;
+      width: 170px;
+      transform: none;
     }
 
     .copy {
