@@ -9,17 +9,33 @@ import { PERSON_JSON_LD } from '../lib/site';
   description="About Loren Muse — virtual influencer, digital personality and author of She Lived Here, Apparently."
   jsonLd={[PERSON_JSON_LD]}
 >
-  <section class="about-page">
-    <div class="wrap grid">
-      <PortraitFigure
-        ratio="4:5"
-        variant={3}
-        priority={true}
-        alt="Portrait of Loren Muse — photography pending"
-        caption="Portrait — photography pending"
-      />
+  <section class="about-hero">
+    <p class="ghost-word" aria-hidden="true">Muse</p>
+
+    <div class="wrap hero-inner">
+      <div class="portrait-col">
+        <div class="portrait-frame">
+          <PortraitFigure
+            ratio="4:5"
+            variant={3}
+            priority={true}
+            alt="Portrait of Loren Muse — photography pending"
+          />
+        </div>
+        <span class="frame-tag" aria-hidden="true">Portrait — Profile</span>
+      </div>
+
       <div class="copy">
-        <h1>About Loren</h1>
+        <span class="eyebrow eyebrow--brass">Profile</span>
+        <h1>About<br /><em>Loren</em></h1>
+      </div>
+    </div>
+  </section>
+
+  <section class="bio" aria-label="Biography">
+    <div class="wrap bio-inner">
+      <span class="rule" aria-hidden="true"></span>
+      <div class="bio-copy">
         <p>
           Loren Muse is a virtual influencer, digital personality and author
           interested in the increasingly peculiar relationship between people
@@ -41,51 +57,245 @@ import { PERSON_JSON_LD } from '../lib/site';
           Loren observes modern life with curiosity, elegance and a
           distinctly dry sense of humour.
         </p>
-        <p>Being virtual gives her an unusual perspective on reality.</p>
-        <p>Apparently, reality has returned the favour.</p>
       </div>
+    </div>
+  </section>
+
+  <section class="pull-moment" aria-label="">
+    <div class="wrap">
+      <p class="pull-quote">Being virtual gives her an unusual perspective on reality.</p>
+    </div>
+  </section>
+
+  <section class="editorial-image">
+    <div class="wrap">
+      <div class="frame">
+        <PortraitFigure
+          ratio="16:9"
+          variant={2}
+          alt="Editorial image of Loren Muse — photography pending"
+        />
+        <span class="frame-rule" aria-hidden="true"></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing-moment">
+    <div class="wrap">
+      <p class="closing-line">Apparently, reality has returned the favour.</p>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  .about-page {
-    padding-block: var(--space-6) var(--space-8);
+  /* -- hero: portrait + About / Loren, ghost Muse backdrop -- */
+  .about-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--space-5);
+    padding-block-end: var(--space-7);
   }
 
-  .grid {
+  .ghost-word {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    top: -0.12em;
+    right: -0.06em;
+    left: auto;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 30vw;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--brass);
+    opacity: 0.06;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    text-align: right;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
     display: grid;
     grid-template-columns: 0.85fr 1.15fr;
-    gap: var(--space-7);
-    align-items: start;
+    align-items: end;
+    gap: var(--space-6);
   }
 
-  .grid > * {
+  .hero-inner > * {
     min-width: 0;
+  }
+
+  .portrait-col {
+    position: relative;
+  }
+
+  .portrait-frame {
+    position: relative;
+    padding: 1.25rem;
+  }
+
+  .portrait-frame::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border: 1px solid rgba(143, 109, 52, 0.4);
+    pointer-events: none;
+  }
+
+  .frame-tag {
+    display: block;
+    margin-top: var(--space-2);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
   }
 
   .copy {
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: var(--space-3);
-    padding-top: var(--space-1);
+    padding-bottom: var(--space-4);
   }
 
-  .about-page h1 {
-    font-size: var(--text-h1);
-    margin-bottom: var(--space-1);
+  .about-hero h1 {
+    font-size: clamp(3rem, 2.25rem + 5vw, 6.5rem);
+    font-weight: 500;
+    color: var(--brass);
+    letter-spacing: -0.01em;
+    text-shadow: 0 1px 0 var(--ivory), 0 2px 22px rgba(43, 38, 34, 0.08);
   }
 
-  .copy p {
-    max-width: 60ch;
-    font-size: 1.0625rem;
+  .about-hero h1 em {
+    font-style: italic;
     color: var(--ink);
   }
 
-  @media (max-width: 860px) {
-    .grid {
+  /* -- biography -- */
+  .bio {
+    padding-block: var(--space-7);
+    border-block-start: 1px solid var(--hairline);
+  }
+
+  .bio-inner {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: var(--space-5);
+  }
+
+  .rule {
+    display: block;
+    width: 1px;
+    background: var(--brass);
+    opacity: 0.5;
+    margin-top: 0.4em;
+  }
+
+  .bio-copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 58ch;
+    margin-inline-start: clamp(0rem, -2rem + 8vw, 6rem);
+  }
+
+  .bio-copy p {
+    font-size: 1.0625rem;
+    line-height: 1.75;
+    color: var(--ink);
+  }
+
+  /* -- pull quote moment -- */
+  .pull-moment {
+    padding-block: var(--space-7);
+  }
+
+  .pull-quote {
+    max-width: 30ch;
+    margin-inline: auto;
+    text-align: center;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.75rem, 1.4rem + 2.4vw, 3.25rem);
+    line-height: 1.2;
+    color: var(--brass);
+    padding-block: var(--space-4);
+    border-block: 1px solid var(--hairline);
+  }
+
+  /* -- optional editorial image -- */
+  .editorial-image {
+    padding-block-end: var(--space-7);
+  }
+
+  .frame {
+    position: relative;
+  }
+
+  .frame-rule {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -1px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, var(--brass) 50%, transparent 100%);
+    opacity: 0.5;
+  }
+
+  /* -- closing moment -- */
+  .closing-moment {
+    padding-block: var(--space-8);
+    text-align: center;
+  }
+
+  .closing-line {
+    max-width: 22ch;
+    margin-inline: auto;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(2rem, 1.5rem + 3.2vw, 4rem);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .ghost-word {
+      font-size: 56vw;
+      top: -0.06em;
+    }
+
+    .hero-inner {
       grid-template-columns: 1fr;
       gap: var(--space-4);
+    }
+
+    .copy {
+      padding-bottom: 0;
+    }
+
+    .bio-inner {
+      grid-template-columns: 1fr;
+      gap: var(--space-3);
+    }
+
+    .rule {
+      width: 2.25rem;
+      height: 1px;
+      margin-top: 0;
+    }
+
+    .bio-copy {
+      margin-inline-start: 0;
     }
   }
 </style>

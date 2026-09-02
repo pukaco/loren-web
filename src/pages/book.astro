@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookCover from '../components/BookCover.astro';
-import { BOOK_JSON_LD } from '../lib/site';
+import { BOOK_JSON_LD, AMAZON_URL } from '../lib/site';
 ---
 
 <BaseLayout
@@ -10,6 +10,8 @@ import { BOOK_JSON_LD } from '../lib/site';
   jsonLd={[BOOK_JSON_LD]}
 >
   <section class="book-page">
+    <p class="ghost-word" aria-hidden="true">Apparently</p>
+
     <div class="wrap grid">
       <div class="cover">
         <BookCover size="full" priority={true} />
@@ -19,16 +21,39 @@ import { BOOK_JSON_LD } from '../lib/site';
         <h1>She Lived Here, Apparently</h1>
         <p class="meta-line">A novel by Loren Muse</p>
 
-        <p class="blurb" data-temporary-copy="true">
-          <em>Official blurb pending.</em> This space is reserved for the
-          book&rsquo;s final back-cover copy — one short paragraph, no
-          reviews, no endorsements.
-        </p>
+        <p class="hook">She invented the perfect tenant. Then everyone started treating her as real.</p>
 
-        <button type="button" class="amazon-button" disabled aria-disabled="true">
-          Buy on Amazon
-          <span class="status">Coming soon</span>
-        </button>
+        <div class="description">
+          <p>
+            Nina works in London lettings, where budgets stretch, commutes
+            shrink and basements somehow acquire excellent natural light. So
+            when she uses a few AI-generated images to invent Sienna, a
+            fictional tenant who appears to live in one of the flats she
+            markets, it feels like a harmless experiment.
+          </p>
+          <p>Then people start following her.</p>
+          <p>
+            They ask where she shops. They worry about her plans. They
+            remember details Nina invented. Soon Sienna is being discussed at
+            Nina&rsquo;s office too.
+          </p>
+          <p>
+            And the more people expect from Sienna, the harder it becomes for
+            Nina to keep an imaginary woman from complicating her very real
+            life.
+          </p>
+        </div>
+
+        {AMAZON_URL ? (
+          <a class="amazon-button" href={AMAZON_URL} target="_blank" rel="noopener noreferrer">
+            Buy on Amazon
+          </a>
+        ) : (
+          <button type="button" class="amazon-button" disabled aria-disabled="true">
+            Buy on Amazon
+            <span class="status">Coming soon</span>
+          </button>
+        )}
       </div>
     </div>
   </section>
@@ -36,12 +61,38 @@ import { BOOK_JSON_LD } from '../lib/site';
 
 <style>
   .book-page {
+    position: relative;
+    overflow: hidden;
     padding-block: var(--space-6) var(--space-8);
   }
 
+  .ghost-word {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    top: -0.1em;
+    right: -0.06em;
+    left: auto;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22vw;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--brass);
+    opacity: 0.06;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+    z-index: 0;
+    text-align: right;
+  }
+
   .grid {
+    position: relative;
+    z-index: 1;
     display: grid;
-    grid-template-columns: 0.55fr 1fr;
+    grid-template-columns: minmax(260px, 420px) 1fr;
     gap: var(--space-7);
     align-items: start;
   }
@@ -51,7 +102,7 @@ import { BOOK_JSON_LD } from '../lib/site';
   }
 
   .cover {
-    max-width: 380px;
+    width: 100%;
   }
 
   .copy {
@@ -69,23 +120,34 @@ import { BOOK_JSON_LD } from '../lib/site';
   }
 
   .book-page h1 {
-    font-size: var(--text-h1);
+    font-size: clamp(2.5rem, 2rem + 3vw, 4.5rem);
     font-style: italic;
+    color: var(--ink);
     margin-block: var(--space-1);
   }
 
-  .blurb {
+  .hook {
     margin-top: var(--space-3);
-    max-width: 52ch;
-    font-size: 1.0625rem;
-    color: var(--ink-muted);
-    line-height: 1.7;
+    max-width: 44ch;
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: clamp(1.375rem, 1.15rem + 1.2vw, 1.875rem);
+    line-height: 1.3;
+    color: var(--brass);
+    padding-left: var(--space-3);
+    border-left: 2px solid var(--brass);
   }
 
-  .blurb em {
+  .description {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+    max-width: 56ch;
+    font-size: 1.0625rem;
+    line-height: 1.75;
     color: var(--ink);
-    font-style: normal;
-    font-weight: 500;
   }
 
   .amazon-button {
@@ -100,10 +162,24 @@ import { BOOK_JSON_LD } from '../lib/site';
     font-size: var(--text-label);
     letter-spacing: 0.08em;
     text-transform: uppercase;
+    text-decoration: none;
     background: transparent;
     color: var(--ink-muted);
     border: 1px solid var(--hairline);
     cursor: not-allowed;
+  }
+
+  a.amazon-button {
+    color: var(--ink);
+    border-color: var(--brass);
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  a.amazon-button:hover,
+  a.amazon-button:focus-visible {
+    background: var(--brass);
+    color: var(--ivory);
   }
 
   .amazon-button .status {
@@ -114,7 +190,17 @@ import { BOOK_JSON_LD } from '../lib/site';
     font-size: var(--text-caption);
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    a.amazon-button {
+      transition: none;
+    }
+  }
+
   @media (max-width: 760px) {
+    .ghost-word {
+      font-size: 42vw;
+    }
+
     .grid {
       grid-template-columns: 1fr;
       gap: var(--space-4);
@@ -122,6 +208,10 @@ import { BOOK_JSON_LD } from '../lib/site';
 
     .cover {
       max-width: 260px;
+    }
+
+    .hook {
+      padding-left: var(--space-2);
     }
   }
 </style>
