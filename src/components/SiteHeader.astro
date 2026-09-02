@@ -1,0 +1,120 @@
+---
+import { INSTAGRAM_URL } from '../lib/site';
+
+const { pathname } = Astro.url;
+
+const links = [
+  { href: '/book', label: 'Book' },
+  { href: '/about', label: 'About' },
+  { href: '/contact', label: 'Contact' },
+];
+
+function isActive(href: string) {
+  return pathname === href || pathname === `${href}/`;
+}
+---
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="wordmark" aria-label="Loren Muse — home">Loren Muse</a>
+    <nav class="nav" aria-label="Primary">
+      <ul>
+        {links.map((link) => (
+          <li>
+            <a href={link.href} aria-current={isActive(link.href) ? 'page' : undefined}>
+              {link.label}
+            </a>
+          </li>
+        ))}
+        <li>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+            Instagram<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--space-2) var(--space-4);
+    padding-block: var(--space-3);
+  }
+
+  @media (max-width: 560px) {
+    .bar {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  .wordmark {
+    font-family: var(--font-display);
+    font-style: italic;
+    font-weight: 500;
+    font-size: 1.375rem;
+    letter-spacing: 0.01em;
+    text-decoration: none;
+    color: var(--ink);
+    padding-block: 0.25rem;
+  }
+
+  .nav {
+    /* flex items default to min-width:auto (their content's max-content
+       width), which blocks wrapping and forces overflow instead — this
+       lets the nav shrink so the list below can actually wrap. */
+    min-width: 0;
+  }
+
+  .nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav a {
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: var(--text-label);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink-muted);
+    padding-block: 0.4rem;
+    transition: color 0.2s ease;
+  }
+
+  .nav a:hover,
+  .nav a:focus-visible {
+    color: var(--brass);
+  }
+
+  .nav a[aria-current='page'] {
+    color: var(--ink);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav a {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .nav ul {
+      column-gap: var(--space-3);
+      row-gap: var(--space-1);
+    }
+  }
+</style>

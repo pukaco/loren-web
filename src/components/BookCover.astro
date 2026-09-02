@@ -1,0 +1,77 @@
+---
+// Temporary cover artwork for "She Lived Here, Apparently". A typographic
+// cover is a legitimate permanent style for literary fiction, but this one
+// is explicitly a placeholder — swap in the final artwork when it exists.
+interface Props {
+  size?: 'compact' | 'full';
+  priority?: boolean;
+}
+
+const { size = 'full', priority = false } = Astro.props;
+---
+
+<figure class={`cover cover--${size}`} data-temporary-asset="true" data-priority={priority}>
+  <svg
+    viewBox="0 0 400 600"
+    role="img"
+    aria-label="Cover of She Lived Here, Apparently by Loren Muse — final artwork pending"
+  >
+    <rect width="400" height="600" fill="#F2ECDF" />
+    <rect x="16" y="16" width="368" height="568" fill="none" stroke="#E7DFCD" stroke-width="1" />
+    <line x1="70" y1="220" x2="330" y2="220" stroke="#8F6D34" stroke-width="1" opacity="0.6" />
+    <text
+      x="200"
+      y="150"
+      text-anchor="middle"
+      font-family="'Bodoni Moda', Georgia, serif"
+      font-style="italic"
+      font-size="34"
+      fill="#2B2622"
+    >She Lived Here,</text>
+    <text
+      x="200"
+      y="192"
+      text-anchor="middle"
+      font-family="'Bodoni Moda', Georgia, serif"
+      font-style="italic"
+      font-size="34"
+      fill="#2B2622"
+    >Apparently</text>
+    <text
+      x="200"
+      y="470"
+      text-anchor="middle"
+      font-family="'Instrument Sans', Arial, sans-serif"
+      font-size="14"
+      letter-spacing="4"
+      fill="#8D8172"
+    >A NOVEL BY</text>
+    <text
+      x="200"
+      y="500"
+      text-anchor="middle"
+      font-family="'Instrument Sans', Arial, sans-serif"
+      font-size="17"
+      letter-spacing="3"
+      fill="#2B2622"
+    >LOREN MUSE</text>
+  </svg>
+</figure>
+
+<style>
+  .cover {
+    margin: 0;
+    aspect-ratio: 2 / 3;
+    background: var(--paper);
+    box-shadow: 0 1px 0 var(--hairline), 0 12px 28px -18px rgba(43, 38, 34, 0.35);
+  }
+
+  .cover svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .cover--compact {
+    width: 100%;
+  }
+</style>

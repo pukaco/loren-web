@@ -1,0 +1,584 @@
+<!doctype html>
+<html lang="sk">
+<head>
+<meta charset="utf-8">
+<title>Loren Muse — Design Proposal v2</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400..500&family=Fraunces:ital,opsz,wght@0,9..144,400..500;1,9..144,400..500&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+  :root{
+    --bg:#FBF8F2; --paper:#F2ECDF; --ink:#2B2622; --ink-muted:#6E6255;
+    --brass:#8F6D34; --line:#E7DFCD; --rejected:#8A5A5A;
+  }
+  *{box-sizing:border-box; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  html,body{background:var(--bg);}
+  body{ color:var(--ink); font-family:"Instrument Sans", ui-sans-serif, system-ui, sans-serif; font-size:12.5px; line-height:1.55; }
+  h1,h2,h3,h4{ font-family:"Bodoni Moda", ui-serif, Georgia, serif; font-weight:500; line-height:1.08; margin:0; color:var(--ink); }
+  p{margin:0;} a{color:inherit;text-decoration:none;} code{font-family:inherit;}
+  @page{ size:A4; margin:16mm 14mm 18mm 14mm; }
+
+  .eyebrow{ font-family:"Instrument Sans",sans-serif; font-weight:600; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-muted); }
+  .eyebrow.brass{color:var(--brass);}
+  .wrap{max-width:100%;} .prose-wide{max-width:100%;}
+
+  .masthead{ padding-bottom:20px; border-bottom:1px solid var(--line); margin-bottom:28px; }
+  .masthead .title{ font-size:50px; margin-top:10px; font-style:italic; font-weight:500; }
+  .masthead .subtitle{ font-family:"Instrument Sans",sans-serif; font-size:14px; color:var(--ink-muted); margin-top:6px; }
+  .masthead .lede{ margin-top:16px; font-size:12px; max-width:85ch; }
+  .meta-row{ display:flex; flex-wrap:wrap; gap:20px; margin-top:18px; padding-top:12px; border-top:1px solid var(--line); }
+  .meta-item .k{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .meta-item .v{margin-top:2px;font-size:11px;}
+
+  .toc{ margin-bottom:30px; padding-bottom:20px; border-bottom:1px solid var(--line); page-break-after:always; }
+  .toc h2{font-size:20px;margin-bottom:14px;font-style:italic;}
+  .toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:32px;}
+  .toc li{font-family:"Instrument Sans",sans-serif;font-size:10.5px;padding:5px 0;border-bottom:1px dotted var(--line);display:flex;gap:8px;break-inside:avoid;}
+  .toc li .n{color:var(--brass);font-weight:600;}
+
+  section.block{ padding-block:20px; border-bottom:1px solid var(--line); break-inside:avoid-page; page-break-inside:avoid; }
+  section.block:last-of-type{border-bottom:none;}
+  .block h2{ font-size:20px; margin-top:6px; font-style:italic; font-weight:500; }
+  .block .stack{margin-top:10px;display:flex;flex-direction:column;gap:7px;}
+  .block .stack p{font-size:11px;}
+
+  .note{ margin-top:12px; border-left:2px solid var(--brass); padding:2px 0 2px 14px; }
+  .note .k{ font-family:"Instrument Sans",sans-serif; font-weight:600; font-size:9px; letter-spacing:0.12em; text-transform:uppercase; color:var(--brass); }
+  .note p{margin-top:5px;font-size:10.5px;}
+
+  table.diff{width:100%;border-collapse:collapse;margin-top:14px;font-size:9.5px;}
+  table.diff th{ text-align:left;font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:8px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);padding-bottom:5px;border-bottom:1px solid var(--line); }
+  table.diff td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line);vertical-align:top;}
+  table.diff td:first-child{color:var(--ink-muted);width:110px;}
+  table.diff td.v1{color:var(--ink-muted);} table.diff td.v2{color:var(--ink);font-weight:500;} table.diff .arrow{color:var(--brass);width:16px;}
+
+  .specimen{margin-top:16px;padding-top:12px;border-top:1px solid var(--line);break-inside:avoid;}
+  .specimen-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+  .specimen-head .role{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .specimen-head .spec{font-family:"Instrument Sans",sans-serif;font-size:9px;color:var(--ink-muted);}
+  .specimen-display{font-family:"Bodoni Moda",serif;font-weight:500;font-size:36px;margin-top:6px;}
+  .specimen-display.italic{font-style:italic;} .specimen-display.brass{color:var(--brass);}
+  .specimen-sans{font-family:"Instrument Sans",sans-serif;font-size:16px;margin-top:6px;}
+  .specimen-sans.upper{text-transform:uppercase;letter-spacing:0.12em;font-size:10.5px;font-weight:600;}
+  .specimen-note{margin-top:6px;font-size:10px;color:var(--ink-muted);}
+
+  .serif-compare{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);margin-top:14px;border:1px solid var(--line);}
+  .serif-card{background:var(--bg);padding:16px;break-inside:avoid;}
+  .serif-card .tag{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .serif-card .word{font-family:"Bodoni Moda",serif;font-size:26px;margin-top:8px;}
+  .serif-card.fraunces .word{font-family:"Fraunces",serif;font-weight:500;}
+  .serif-card .desc{margin-top:8px;font-size:9.5px;color:var(--ink-muted);line-height:1.5;}
+  .serif-card.chosen{outline:1.5px solid var(--brass);outline-offset:-1.5px;}
+  .serif-card .verdict{margin-top:10px;font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;}
+  .serif-card.chosen .verdict{color:var(--brass);} .serif-card:not(.chosen) .verdict{color:var(--ink-muted);}
+
+  table.scale{width:100%;border-collapse:collapse;margin-top:16px;font-size:10px;}
+  table.scale th{ text-align:left;font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);padding-bottom:5px;border-bottom:1px solid var(--line); }
+  table.scale td{padding:6px 8px 6px 0;border-bottom:1px solid var(--line);}
+  table.scale td:first-child{color:var(--ink-muted);width:70px;}
+
+  .palette-label{margin-top:16px;font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--ink-muted);}
+  .palette{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);margin-top:8px;border:1px solid var(--line);}
+  .swatch{background:var(--bg);padding:12px;display:flex;flex-direction:column;gap:16px;break-inside:avoid;}
+  .swatch .chip{height:36px;border:1px solid var(--line);}
+  .swatch .name{font-size:10px;font-weight:600;} .swatch.brass-swatch .name{color:var(--brass);}
+  .swatch .hex{font-family:"Instrument Sans",sans-serif;font-size:8.5px;color:var(--ink-muted);margin-top:1px;}
+  .swatch .use{font-size:8.5px;color:var(--ink-muted);margin-top:4px;line-height:1.4;}
+
+  .rejected-note{margin-top:12px;padding:10px 14px;border:1px dashed var(--line);font-size:9.5px;color:var(--ink-muted);}
+  .rejected-note .chip-inline{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--rejected);vertical-align:middle;margin-right:6px;}
+
+  .frame-label{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:6px;margin-top:16px;}
+  .device{ border:1px solid var(--line); background:var(--bg); padding:6px; break-inside:avoid; page-break-inside:avoid; }
+  .device-mobile{max-width:180px;}
+  .wf{border:1px dashed var(--line);}
+  .wf-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-bottom:1px dashed var(--line);gap:8px;flex-wrap:wrap;}
+  .wf-label{font-family:"Instrument Sans",sans-serif;font-size:7.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--ink-muted);}
+  .wf-word{font-family:"Bodoni Moda",serif;font-style:italic;font-size:11px;}
+  .wf-nav-links{display:flex;gap:10px;font-family:"Instrument Sans",sans-serif;font-size:7.5px;color:var(--ink-muted);flex-wrap:wrap;row-gap:4px;}
+  .wf-photo{ background-image:repeating-linear-gradient(135deg, rgba(43,38,34,0.14), rgba(43,38,34,0.14) 1px, transparent 1px, transparent 7px); background-color:rgba(43,38,34,0.04); border:1px dashed var(--line); display:flex;align-items:flex-end;padding:6px; }
+  .wf-photo .wf-label{background:var(--bg);padding:1px 4px;}
+  .wf-hero{display:grid;grid-template-columns:1.1fr 0.9fr;min-height:150px;}
+  .wf-hero .copy{padding:16px;display:flex;flex-direction:column;justify-content:center;gap:8px;border-left:1px dashed var(--line);}
+  .wf-hero .h1demo{font-family:"Bodoni Moda",serif;font-style:italic;color:var(--brass);font-size:24px;line-height:1;}
+  .wf-hero .desc{font-size:9px;color:var(--ink-muted);max-width:32ch;}
+  .wf-hero .cta{font-family:"Instrument Sans",sans-serif;font-size:8px;text-decoration:underline;}
+  .wf-section{display:grid;grid-template-columns:1fr 1fr;min-height:120px;}
+  .wf-section.reverse .copy{order:1;} .wf-section.reverse .wf-photo{order:2;}
+  .wf-section .copy{padding:16px;display:flex;flex-direction:column;justify-content:center;gap:6px;}
+  .wf-section .desc{font-size:8.5px;color:var(--ink-muted);max-width:36ch;}
+  .wf-section .cta{font-family:"Instrument Sans",sans-serif;font-size:8px;text-decoration:underline;}
+  .wf-footer{padding:8px;display:flex;justify-content:space-between;font-family:"Instrument Sans",sans-serif;font-size:7.5px;color:var(--ink-muted);}
+  .mob-hero .wf-photo{aspect-ratio:4/5;} .mob-hero .copy{padding:10px;border-left:none;border-top:1px dashed var(--line);} .mob-hero .h1demo{font-size:16px;}
+  .mob-section .wf-photo{aspect-ratio:1/1;} .mob-section .copy{padding:10px;}
+
+  .wf-book-compact{display:flex;gap:18px;padding:20px 16px;align-items:center;}
+  .wf-book-compact .cover{width:70px;flex:0 0 auto;}
+  .wf-book-compact .cover .wf-photo{aspect-ratio:2/3;padding:4px;}
+  .wf-book-compact .copy{display:flex;flex-direction:column;gap:6px;border-left:1px solid var(--line);padding-left:16px;}
+  .wf-book-compact .rule{width:20px;height:1px;background:var(--brass);}
+  .wf-book-compact .h2demo{font-family:"Bodoni Moda",serif;font-style:italic;font-size:16px;}
+  .wf-book-compact .desc{font-size:9px;color:var(--ink-muted);max-width:42ch;}
+  .wf-book-compact .cta{font-family:"Instrument Sans",sans-serif;font-size:8px;color:var(--brass);text-decoration:underline;}
+
+  .wf-book{display:grid;grid-template-columns:0.8fr 1.2fr;min-height:190px;}
+  .wf-book .copy{padding:18px;display:flex;flex-direction:column;gap:7px;justify-content:center;border-left:1px dashed var(--line);}
+  .wf-book .h1demo{font-family:"Bodoni Moda",serif;font-style:italic;font-size:19px;}
+  .wf-book .meta-line{font-family:"Instrument Sans",sans-serif;font-size:8px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-muted);}
+  .wf-book .desc{font-size:9px;color:var(--ink-muted);max-width:40ch;}
+
+  .wf-about{display:grid;grid-template-columns:0.9fr 1.1fr;min-height:170px;}
+  .wf-about .copy{padding:18px;display:flex;flex-direction:column;gap:6px;justify-content:center;border-left:1px dashed var(--line);}
+  .wf-about .desc{font-size:8.5px;color:var(--ink-muted);line-height:1.6;}
+  .deferred-block{border-top:1px dashed var(--line);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;opacity:0.6;}
+  .deferred-block .txt{font-size:9px;color:var(--ink-muted);}
+  .deferred-block .flag{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:7.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--rejected);border:1px solid var(--rejected);padding:2px 6px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:6px;}
+  .copytext{margin-top:8px;padding:14px;background:var(--paper);border-left:2px solid var(--brass);font-size:10px;line-height:1.6;}
+
+  .imgspecs{display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:16px;}
+  .imgspec{background:var(--bg);display:grid;grid-template-columns:130px 1fr;gap:14px;padding:14px;break-inside:avoid;}
+  .imgspec h4{font-family:"Bodoni Moda",serif;font-weight:500;font-style:italic;font-size:13px;}
+  .imgspec .role{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:8.5px;color:var(--brass);letter-spacing:0.06em;text-transform:uppercase;margin-bottom:3px;}
+  .specgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:6px 14px;margin-top:6px;}
+  .specgrid div .k{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:7.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--ink-muted);}
+  .specgrid div .v{font-size:9.5px;margin-top:1px;}
+
+  .motion-demo{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;align-items:flex-start;}
+  .demo-card{border:1px dashed var(--line);padding:14px;flex:1 1 200px;}
+  .demo-card .frame-label{margin:0 0 8px 0;}
+  .reveal-box{ height:60px; background-image:repeating-linear-gradient(135deg, rgba(43,38,34,0.14), rgba(43,38,34,0.14) 1px, transparent 1px, transparent 7px); background-color:rgba(43,38,34,0.04); }
+  .hover-link{font-family:"Bodoni Moda",serif;font-style:italic;font-size:14px;border-bottom:1px solid var(--brass);padding-bottom:2px;}
+
+  pre.tree{ font-family:"Instrument Sans",monospace; font-size:9.5px; line-height:1.6; color:var(--ink); white-space:pre-wrap; margin-top:14px; padding:14px; background:var(--paper); border:1px solid var(--line); }
+  pre.tree .dim{color:var(--ink-muted);}
+
+  .checklist{margin-top:16px;display:flex;flex-direction:column;gap:1px;background:var(--line);border:1px solid var(--line);}
+  .checklist .row{background:var(--bg);display:grid;grid-template-columns:130px 1fr;gap:12px;padding:10px 14px;}
+  .checklist .row .term{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9.5px;color:var(--brass);}
+  .checklist .row .def{font-size:9.5px;color:var(--ink-muted);}
+
+  .exclude-cols{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:16px;}
+  .exclude-cols h4{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--ink-muted);margin-bottom:8px;}
+  .exclude-cols ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:5px;}
+  .exclude-cols li{font-size:9.5px;padding-bottom:5px;border-bottom:1px solid var(--line);}
+
+  .verdict-box{margin-top:16px;padding:22px;background:var(--paper);border-top:2px solid var(--brass);break-inside:avoid;}
+  .verdict-box .status{font-family:"Instrument Sans",sans-serif;font-weight:600;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brass);}
+  .verdict-box h3{margin-top:8px;font-size:19px;font-style:italic;font-weight:500;}
+  .verdict-box .body{margin-top:10px;font-size:10.5px;}
+  .verdict-box .conditions{margin-top:12px;display:flex;flex-direction:column;gap:5px;}
+  .verdict-box .conditions li{font-size:9.5px;color:var(--ink-muted);list-style:none;padding-left:14px;position:relative;}
+  .verdict-box .conditions li::before{content:"—";position:absolute;left:0;color:var(--brass);}
+
+  footer.doc-footer{padding:24px 0 0;}
+  footer.doc-footer .prose{font-size:10px;color:var(--ink-muted);}
+  footer.doc-footer .sign{margin-top:10px;font-family:"Instrument Sans",sans-serif;font-size:9px;color:var(--ink-muted);}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="masthead">
+  <div class="eyebrow brass">Design Proposal v2 — revízia smerom k väčšej elegancii</div>
+  <h1 class="title">Loren Muse</h1>
+  <div class="subtitle">Official author website — light, airy, refined</div>
+  <p class="lede">Druhá iterácia dizajnového návrhu. Pôvodný smer z v1 ostáva správny v princípe, tento dokument ho posúva k svetlejšiemu, čistejšiemu a viac editoriálnemu výsledku s disciplinovaným brass akcentom. Stále ide o návrh — implementácia nezačína.</p>
+  <div class="meta-row">
+    <div class="meta-item"><div class="k">Klient</div><div class="v">Loren Muse</div></div>
+    <div class="meta-item"><div class="k">Projekt</div><div class="v">lorenmuse.com</div></div>
+    <div class="meta-item"><div class="k">Fáza</div><div class="v">01 — Design proposal, v2</div></div>
+    <div class="meta-item"><div class="k">Nadväzuje na</div><div class="v">Design Proposal v1</div></div>
+    <div class="meta-item"><div class="k">Status</div><div class="v">Čaká na schválenie</div></div>
+  </div>
+</header>
+
+<div class="toc">
+  <h2>Obsah</h2>
+  <ol>
+    <li><span class="n">01</span> Zmeny oproti v1</li>
+    <li><span class="n">02</span> Creative direction</li>
+    <li><span class="n">03</span> Farebná paleta</li>
+    <li><span class="n">04</span> Typografia</li>
+    <li><span class="n">05</span> Homepage art direction</li>
+    <li><span class="n">06</span> Homepage — desktop</li>
+    <li><span class="n">07</span> Homepage — mobile</li>
+    <li><span class="n">08</span> Book page</li>
+    <li><span class="n">09</span> About page</li>
+    <li><span class="n">10</span> Contact / Privacy copy</li>
+    <li><span class="n">11</span> Image art direction</li>
+    <li><span class="n">12</span> Motion</li>
+    <li><span class="n">13</span> Komponenty</li>
+    <li><span class="n">14</span> Čo nepridáme</li>
+    <li><span class="n">15</span> Odporúčanie</li>
+  </ol>
+</div>
+
+<main>
+
+<section class="block" id="s01">
+  <div class="eyebrow">01 — Zhodnotenie zmien</div>
+  <h2>Čo sa mení oproti v1</h2>
+  <p class="prose-wide" style="margin-top:12px;">Princíp z v1 (editoriál, nie internet) zostáva. Mení sa mierka svetla, disciplína akcentovej farby a niekoľko konkrétnych rozhodnutí v obsahu.</p>
+  <table class="diff">
+    <thead><tr><th>Oblasť</th><th>v1</th><th></th><th>v2</th></tr></thead>
+    <tbody>
+      <tr><td>Základná plocha</td><td class="v1">Warm ivory #F4EFE6</td><td class="arrow">→</td><td class="v2">Veľmi svetlá ivory #FBF8F2</td></tr>
+      <tr><td>Akcent</td><td class="v1">Oxblood</td><td class="arrow">→</td><td class="v2">Muted antique brass</td></tr>
+      <tr><td>Display font</td><td class="v1">Fraunces</td><td class="arrow">→</td><td class="v2">Bodoni Moda (high-fashion, kurzíva)</td></tr>
+      <tr><td>Počet fontov</td><td class="v1">3 — vrátane mono</td><td class="arrow">→</td><td class="v2">2 — Bodoni Moda / Instrument Sans</td></tr>
+      <tr><td>Homepage book</td><td class="v1">Cover ako 50% obrazová plocha</td><td class="arrow">→</td><td class="v2">Kompaktný cover, asymetrický layout</td></tr>
+      <tr><td>3. homepage sekcia</td><td class="v1">Nadpis "On being watched"</td><td class="arrow">→</td><td class="v2">Bez tematického nadpisu</td></tr>
+      <tr><td>Reading/Listening/Noticing</td><td class="v1">Súčasť About page</td><td class="arrow">→</td><td class="v2">Vypustené pre launch</td></tr>
+      <tr><td>Mobile nav</td><td class="v1">Skratka "IG"</td><td class="arrow">→</td><td class="v2">Plné "Instagram"</td></tr>
+      <tr><td>Privacy text</td><td class="v1">Pevnejšie formulácie</td><td class="arrow">→</td><td class="v2">Zjemnené, overiteľné fakty</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="block" id="s02">
+  <div class="eyebrow">02 — Creative direction</div>
+  <h2>Ticho, svetlo, jedna disciplinovaná výnimka</h2>
+  <div class="stack prose-wide">
+    <p>V1 stavala na tichu a priestore. V2 pridáva presne jednu vec, ktorá smie vystúpiť z ticha: brass. Zvyšok systému musí byť ešte pokojnejší než predtým, aby táto výnimka fungovala.</p>
+    <p>Základná plocha je svetlejšia a menej sýta než v1, kontrast je jemnejší, hairline oddeľovače sú takmer neviditeľné. Brass sa objaví len tam, kde má naozaj čo povedať — hero, jeden alebo dva vybrané momenty, nikdy plošne.</p>
+  </div>
+  <div class="note">
+    <div class="k">Kritická poznámka štúdia</div>
+    <p>Zlatý/mosadzný tón je najrizikovejšie rozhodnutie v návrhu — ľahko sa zmení z "elegantné" na "lacné". Tvrdé pravidlo: brass sa nikdy nepoužije na plochu, iba na text, tenké línie a podčiarknutia. Ústupová možnosť: obmedziť brass iba na hero H1.</p>
+  </div>
+</section>
+
+<section class="block" id="s03">
+  <div class="eyebrow">03 — Farebná paleta</div>
+  <h2>Primárna paleta</h2>
+  <div class="palette">
+    <div class="swatch"><div class="chip" style="background:#FBF8F2;"></div><div><div class="name">Pale Ivory</div><div class="hex">#FBF8F2</div><div class="use">Základná plocha</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#F2ECDF;"></div><div><div class="name">Soft Paper</div><div class="hex">#F2ECDF</div><div class="use">Alternujúce sekcie</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#2B2622;"></div><div><div class="name">Charcoal Ink</div><div class="hex">#2B2622</div><div class="use">Primárny text</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#8D8172;"></div><div><div class="name">Muted Warm Grey</div><div class="hex">#8D8172</div><div class="use">Sekundárny text</div></div></div>
+    <div class="swatch brass-swatch"><div class="chip" style="background:#8F6D34;"></div><div><div class="name">Antique Brass</div><div class="hex">#8F6D34</div><div class="use">Jediný akcent</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#E7DFCD;"></div><div><div class="name">Hairline</div><div class="hex">#E7DFCD</div><div class="use">Deliace linky</div></div></div>
+  </div>
+  <div class="palette-label">Alternatívna paleta — Quiet Stone</div>
+  <div class="palette">
+    <div class="swatch"><div class="chip" style="background:#F7F5F0;"></div><div><div class="name">Stone White</div><div class="hex">#F7F5F0</div><div class="use">Chladnejšia plocha</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#EDEAE1;"></div><div><div class="name">Soft Putty</div><div class="hex">#EDEAE1</div><div class="use">Alternujúce sekcie</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#26241F;"></div><div><div class="name">Deep Charcoal</div><div class="hex">#26241F</div><div class="use">Primárny text</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#847F76;"></div><div><div class="name">Cool Grey</div><div class="hex">#847F76</div><div class="use">Sekundárny text</div></div></div>
+    <div class="swatch brass-swatch"><div class="chip" style="background:#7C5F2E;"></div><div><div class="name">Deep Brass</div><div class="hex">#7C5F2E</div><div class="use">Akcent, tmavší</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#DFDACC;"></div><div><div class="name">Hairline</div><div class="hex">#DFDACC</div><div class="use">Deliace linky</div></div></div>
+  </div>
+  <div class="rejected-note"><span class="chip-inline"></span>Zamietnutá možnosť: oxblood akcent z v1 (#6E3A3A). Príliš tmavý a vínový pre smer "light, airy, refined".</div>
+</section>
+
+<section class="block" id="s04">
+  <div class="eyebrow">04 — Typografický systém</div>
+  <h2>Dva fonty, žiadny kompromis</h2>
+  <p class="prose-wide" style="margin-top:12px;">Mono z v1 nenieslo dostatočnú hodnotu na verejnom webe. V2 ide na dva fonty.</p>
+  <div class="serif-compare">
+    <div class="serif-card fraunces">
+      <div class="tag">Možnosť A</div>
+      <div class="word">Loren Muse</div>
+      <p class="desc">Fraunces — mäkký editorial serif. Teplý, literárny. Bol to výber v1.</p>
+      <div class="verdict">Zvažované, nezvolené</div>
+    </div>
+    <div class="serif-card chosen">
+      <div class="tag">Možnosť B</div>
+      <div class="word" style="font-style:italic;">Loren Muse</div>
+      <p class="desc">Bodoni Moda — vysoký kontrast, Didot/Bodoni tradícia módnych titulných strán. Chladnejší, viac high fashion.</p>
+      <div class="verdict">Odporúčané finálne riešenie</div>
+    </div>
+  </div>
+  <p class="prose-wide" style="margin-top:12px;font-size:10px;color:var(--ink-muted);">Bodoni Moda sa s brass akcentom viaže prirodzenejšie a pôsobí drahšie bez toho, aby bola hlučná.</p>
+
+  <div class="specimen">
+    <div class="specimen-head"><span class="role">Display — Bodoni Moda</span><span class="spec">Weight 400–600 · italic pre hero</span></div>
+    <div class="specimen-display italic brass">Loren Muse</div>
+    <p class="specimen-note">Kurzíva nesie hero H1 v brass tóne. Vzpriamený rez na H2/H3 v neutrálnej farbe.</p>
+  </div>
+  <div class="specimen">
+    <div class="specimen-head"><span class="role">Text a UI — Instrument Sans</span><span class="spec">Weight 400 / 500 / 600</span></div>
+    <div class="specimen-sans">Author. Digital personality.</div>
+    <p class="specimen-note">Nesie telo textu, navigáciu aj meta údaje — nahrádza potrebu mono rodiny.</p>
+  </div>
+
+  <table class="scale">
+    <thead><tr><th>Rola</th><th>Font</th><th>Veľkosť</th><th>Použitie</th></tr></thead>
+    <tbody>
+      <tr><td>H1</td><td>Bodoni Moda 500 italic</td><td>48–104px</td><td>Hero, brass farba</td></tr>
+      <tr><td>H2</td><td>Bodoni Moda 500 italic</td><td>28–42px</td><td>Sekčné nadpisy, neutrálne</td></tr>
+      <tr><td>H3</td><td>Bodoni Moda 500</td><td>20–26px</td><td>Book title, vzpriamený rez</td></tr>
+      <tr><td>Body</td><td>Instrument Sans 400</td><td>17–18px</td><td>Odstavce</td></tr>
+      <tr><td>Nav</td><td>Instrument Sans 600</td><td>13px</td><td>Navigácia</td></tr>
+      <tr><td>Meta</td><td>Instrument Sans 500</td><td>11–12px</td><td>Rok, žáner</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="block" id="s05">
+  <div class="eyebrow">05 — Homepage art direction</div>
+  <h2>Loren dominuje, kniha sprevádza</h2>
+  <div class="stack prose-wide">
+    <p>Hero zostáva koncepčne rovnaký ako v1. <strong>Book sekcia</strong> už nie je rovnocenný obrazový blok — cover je malý, objektový prvok (~140px) v asymetrickom layoute s tenkou brass líniou.</p>
+    <p><strong>Tretia sekcia</strong> stráca nadpis "On being watched" — iba fotografia a krátky odstavec bez H2, vizuálna prestávka namiesto ďalšej "kapitoly".</p>
+  </div>
+</section>
+
+<section class="block" id="s06">
+  <div class="eyebrow">06 — Wireframe: Homepage / Desktop</div>
+  <h2>Hero → kompaktná kniha → Loren</h2>
+  <div class="frame-label">Desktop — 1440px</div>
+  <div class="device">
+    <div class="wf">
+      <div class="wf-row">
+        <div class="wf-word">Loren Muse</div>
+        <div class="wf-nav-links"><span>BOOK</span><span>ABOUT</span><span>CONTACT</span><span>INSTAGRAM</span></div>
+      </div>
+      <div class="wf-hero">
+        <div class="wf-photo"><span class="wf-label">Photo — hero — 4:5</span></div>
+        <div class="copy"><div class="h1demo">Loren Muse</div><div class="desc">Author. Digital personality. Interested in reality, apparently.</div><div class="cta">Meet Loren →</div></div>
+      </div>
+      <div class="wf-book-compact">
+        <div class="cover"><div class="wf-photo"><span class="wf-label">Cover 2:3</span></div></div>
+        <div class="copy">
+          <div class="rule"></div>
+          <div class="h2demo">She Lived Here, Apparently</div>
+          <div class="desc">A contemporary comedy about property, influencers, social media and the increasingly complicated business of appearing real.</div>
+          <div class="cta">Discover the book →</div>
+        </div>
+      </div>
+      <div class="wf-section reverse">
+        <div class="wf-photo"><span class="wf-label">Photo — secondary portrait — 4:5</span></div>
+        <div class="copy">
+          <div class="wf-label" style="margin-bottom:4px;">[ bez H2 ]</div>
+          <div class="desc">Loren Muse is a virtual influencer, digital personality and author fascinated by the strange relationship between people and the identities they encounter online.</div>
+          <div class="cta">About Loren →</div>
+        </div>
+      </div>
+      <div class="wf-footer"><span>© 2026 Loren Muse</span><span>Instagram · Privacy</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s07">
+  <div class="eyebrow">07 — Wireframe: Homepage / Mobile</div>
+  <h2>Plné slovo Instagram</h2>
+  <div class="frame-label">Mobile — 390px</div>
+  <div class="device device-mobile">
+    <div class="wf">
+      <div class="wf-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <div class="wf-word">Loren Muse</div>
+        <div class="wf-nav-links"><span>BOOK</span><span>ABOUT</span><span>CONTACT</span><span>INSTAGRAM</span></div>
+      </div>
+      <div class="wf-hero mob-hero" style="grid-template-columns:1fr;">
+        <div class="wf-photo"><span class="wf-label">Photo — hero — 4:5</span></div>
+        <div class="copy"><div class="h1demo">Loren Muse</div><div class="desc">Author. Digital personality.</div><div class="cta">Meet Loren →</div></div>
+      </div>
+      <div class="wf-book-compact" style="flex-direction:column;align-items:flex-start;padding:16px 12px;">
+        <div class="cover" style="width:60px;"><div class="wf-photo"><span class="wf-label">Cover</span></div></div>
+        <div class="copy" style="border-left:none;border-top:1px dashed var(--line);padding-left:0;padding-top:10px;">
+          <div class="rule"></div><div class="h2demo" style="font-size:14px;">She Lived Here, Apparently</div>
+          <div class="desc">A comedy about property, influencers and appearing real.</div>
+          <div class="cta">Discover the book →</div>
+        </div>
+      </div>
+      <div class="wf-section mob-section" style="grid-template-columns:1fr;">
+        <div class="wf-photo"><span class="wf-label">Portrait</span></div>
+        <div class="copy"><div class="wf-label">[ bez H2 ]</div><div class="desc">A digital personality fascinated by online identity.</div><div class="cta">About Loren →</div></div>
+      </div>
+      <div class="wf-footer" style="flex-direction:column;gap:4px;"><span>© 2026 Loren Muse</span><span>Instagram · Privacy</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s08">
+  <div class="eyebrow">08 — Wireframe: Book page</div>
+  <h2>Tu smie byť cover väčší</h2>
+  <div class="frame-label">Desktop — 1440px</div>
+  <div class="device">
+    <div class="wf">
+      <div class="wf-book">
+        <div class="wf-photo"><span class="wf-label">Photo — book cover — 2:3</span></div>
+        <div class="copy">
+          <div class="meta-line">CONTEMPORARY HUMOROUS FICTION · 2026</div>
+          <div class="h1demo">She Lived Here, Apparently</div>
+          <div class="meta-line">A novel by Loren Muse</div>
+          <div class="desc">[ pripravené miesto pre oficiálny blurb ]</div>
+          <div class="wf-label">[ Buy on Amazon — pripravené, neaktívne ]</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s09">
+  <div class="eyebrow">09 — Wireframe: About page</div>
+  <h2>Portrét a text, bez triptychu</h2>
+  <div class="frame-label">Desktop — 1440px</div>
+  <div class="device">
+    <div class="wf">
+      <div class="wf-about">
+        <div class="wf-photo"><span class="wf-label">Photo — main About portrait — 4:5</span></div>
+        <div class="copy">
+          <div class="h2demo">About Loren</div>
+          <div class="desc">Loren Muse is a virtual influencer, digital personality and author interested in the increasingly peculiar relationship between people and the identities they encounter online…</div>
+          <div class="wf-label">[ celý schválený text, 5 odsekov ]</div>
+        </div>
+      </div>
+      <div class="deferred-block"><div class="txt">Reading / Listening / Noticing — voliteľný modul, post-launch</div><div class="flag">Odložené</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s10">
+  <div class="eyebrow">10 — Contact a Privacy copy</div>
+  <h2>Vecný text, bez právneho tónu</h2>
+  <div class="two-col">
+    <div>
+      <div class="frame-label" style="margin-top:0;">Contact</div>
+      <div class="copytext">Contact<br><br>For publishing, media and other enquiries:<br>[ email placeholder ]<br><br>Instagram →</div>
+    </div>
+    <div>
+      <div class="frame-label" style="margin-top:0;">Privacy</div>
+      <div class="copytext">Privacy<br><br>This website does not use analytics, advertising trackers or non-essential cookies. It has no forms and no mailing list, so there is nothing to collect. Instagram is a plain outbound link, not an embedded feed.</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s11">
+  <div class="eyebrow">11 — Image art direction</div>
+  <h2>Krásna, nie dokonalá</h2>
+  <p class="prose-wide" style="margin-top:12px;">Čím reálnejšia pleť, vlasy a mikro-nedokonalosti, tým dôveryhodnejšia je celá stránka.</p>
+  <div class="imgspecs">
+    <div class="imgspec">
+      <div><div class="role">Slot 01</div><h4>Hero portrait</h4></div>
+      <div class="specgrid">
+        <div><div class="k">Pohľad</div><div class="v">Priamy, pokojný, nie pózovaný úsmev</div></div>
+        <div><div class="k">Styling</div><div class="v">Čistý, drahý, nenútený</div></div>
+        <div><div class="k">Pleť a vlasy</div><div class="v">Viditeľná textúra, žiadny plastový lesk</div></div>
+        <div><div class="k">Vyhnúť sa</div><div class="v">Fashion campaign pózam, HDR vzhľadu</div></div>
+      </div>
+    </div>
+    <div class="imgspec">
+      <div><div class="role">Slot 02</div><h4>Secondary portrait</h4></div>
+      <div class="specgrid">
+        <div><div class="k">Pohľad</div><div class="v">Mimo kamery, menej pózovaný</div></div>
+        <div><div class="k">Nálada</div><div class="v">Dokumentárnejšia, nie selfie uhol</div></div>
+        <div><div class="k">Vyhnúť sa</div><div class="v">Zrkadlovým selfie, telefónu v zábere</div></div>
+      </div>
+    </div>
+    <div class="imgspec">
+      <div><div class="role">Slot 03</div><h4>Book cover</h4></div>
+      <div class="specgrid">
+        <div><div class="k">Pomer</div><div class="v">2:3, min. 1800×2700px</div></div>
+        <div><div class="k">Poznámka</div><div class="v">Mimo scope, dodáva sa hotové</div></div>
+      </div>
+    </div>
+    <div class="imgspec">
+      <div><div class="role">Slot 04</div><h4>Detail shot</h4></div>
+      <div class="specgrid">
+        <div><div class="k">Pomer</div><div class="v">3:2 alebo 1:1</div></div>
+        <div><div class="k">Obsah</div><div class="v">Detail namiesto tváre</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s12">
+  <div class="eyebrow">12 — Motion principles</div>
+  <h2>Brass sa hýbe najmenej zo všetkého</h2>
+  <div class="motion-demo">
+    <div class="demo-card"><div class="frame-label">Image reveal</div><div class="reveal-box"></div></div>
+    <div class="demo-card"><div class="frame-label">Hover — brass podčiarknutie</div><span class="hover-link">Meet Loren</span></div>
+  </div>
+  <div class="stack prose-wide" style="margin-top:14px;">
+    <p><strong>Áno:</strong> jemný fade pri načítaní; brass podčiarknutie iba na hlavných odkazoch; jemný farebný prechod na navigácii, neutrálny.</p>
+    <p><strong>Nie:</strong> brass hover na bežných textových odkazoch; scroll-jacking, parallax, veľké page transitions.</p>
+  </div>
+</section>
+
+<section class="block" id="s13">
+  <div class="eyebrow">13 — Komponentová architektúra</div>
+  <h2>Pre implementáciu v Astro</h2>
+  <pre class="tree"><span class="dim">src/</span>
+├─ <span class="dim">layouts/</span>BaseLayout.astro
+├─ <span class="dim">components/</span>
+│  ├─ SiteHeader.astro         <span class="dim">// plné "Instagram"</span>
+│  ├─ SiteFooter.astro
+│  ├─ Hero.astro
+│  ├─ BookFeatureCompact.astro <span class="dim">// homepage, malý cover</span>
+│  ├─ BookFeatureFull.astro    <span class="dim">// Book page, veľký cover</span>
+│  ├─ PortraitBlock.astro
+│  └─ CulturalNotes.astro      <span class="dim">// pripravené, nepoužité</span>
+├─ <span class="dim">pages/</span>index / book / about / contact / privacy.astro
+└─ <span class="dim">styles/</span>tokens.css
+
+<span class="dim">public/fonts/</span> — Bodoni Moda, Instrument Sans, self-hosted</pre>
+
+  <div class="frame-label">Produkčná disciplína</div>
+  <div class="checklist">
+    <div class="row"><div class="term">Reduced motion</div><div class="def">Statický ekvivalent za <code>prefers-reduced-motion</code>.</div></div>
+    <div class="row"><div class="term">Keyboard focus</div><div class="def">Viditeľný brass focus outline na interaktívnych prvkoch.</div></div>
+    <div class="row"><div class="term">Responsive images</div><div class="def"><code>srcset</code>/<code>sizes</code>, AVIF/WebP s fallbackom.</div></div>
+    <div class="row"><div class="term">Alt text</div><div class="def">Popisný, nie dekoratívny.</div></div>
+    <div class="row"><div class="term">Structured data</div><div class="def">JSON-LD Person a Book.</div></div>
+    <div class="row"><div class="term">Sitemap</div><div class="def">sitemap.xml generovaný pri builde.</div></div>
+    <div class="row"><div class="term">Robots</div><div class="def">robots.txt povoľujúci indexáciu.</div></div>
+  </div>
+</section>
+
+<section class="block" id="s14">
+  <div class="eyebrow">14 — Čo vedome nepridáme</div>
+  <h2>Zdržanlivosť platí aj pre zlato</h2>
+  <div class="exclude-cols">
+    <div>
+      <h4>Zo zadania</h4>
+      <ul>
+        <li>Google Analytics, Meta Pixel, trackery</li>
+        <li>Cookie banner</li>
+        <li>Kontaktný formulár, newsletter</li>
+        <li>Embedded Instagram feed</li>
+        <li>Fake recenzie, ocenenia</li>
+        <li>Shiny/metallic gold, bevel, 3D efekty</li>
+        <li>Black + gold luxury branding</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Návrh štúdia navyše</h4>
+      <ul>
+        <li>Brass výplň na tlačidle alebo ploche</li>
+        <li>Viac než jeden brass hover moment</li>
+        <li>Reading/Listening/Noticing pri launchi</li>
+        <li>Google Fonts request v produkcii</li>
+        <li>Mono font rodina</li>
+        <li>Skratka "IG"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="s15">
+  <div class="eyebrow">15 — Finálne odporúčanie</div>
+  <h2>Je návrh pripravený na implementáciu?</h2>
+  <div class="verdict-box">
+    <div class="status">Odporúčanie štúdia</div>
+    <h3>Áno, smer je pripravený na implementáciu.</h3>
+    <p class="body">Paleta, typografia, spacing aj wireframy sú finálne. Pred spustením prác odporúčame doriešiť tri otvorené rozhodnutia:</p>
+    <ul class="conditions">
+      <li>Reading / Listening / Noticing — zahrnúť, alebo nechať ako pripravený komponent</li>
+      <li>Finálne fotografie (sloty 01–04)</li>
+      <li>Finálny blurb pre Book page a kontaktný email</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer class="doc-footer">
+  <p class="prose-wide">Toto je revidovaný návrh na schválenie, nie hotová stránka.</p>
+  <div class="sign">Pripravilo štúdio pre Loren Muse · Fáza 01 — Design Proposal v2 · 2. september 2026</div>
+</footer>
+
+</div>
+</body>
+</html>

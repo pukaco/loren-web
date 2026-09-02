@@ -1,0 +1,85 @@
+---
+// Temporary placeholder artwork standing in for a real photograph of Loren Muse.
+// Replace with the final photography from Design Proposal v2, section 11
+// (image art direction) once it exists — see README "Photography" section.
+// This component intentionally does NOT look like a wireframe: it is a
+// restrained abstract mark in the site's own palette, meant to read as a
+// deliberate placeholder rather than a broken image.
+interface Props {
+  ratio?: '4:5' | '1:1';
+  variant?: 1 | 2 | 3;
+  alt: string;
+  caption?: string;
+  priority?: boolean;
+}
+
+const { ratio = '4:5', variant = 1, alt, caption, priority = false } = Astro.props;
+
+const dims = ratio === '1:1' ? { w: 480, h: 480 } : { w: 480, h: 600 };
+
+// three quiet variations so repeated placeholders don't look identical
+const variants = {
+  1: { cx: 240, cy: 260, rx: 132, ry: 168, archRotate: -18, archY: 150 },
+  2: { cx: 236, cy: 300, rx: 118, ry: 176, archRotate: 12, archY: 210 },
+  3: { cx: 244, cy: 240, rx: 126, ry: 158, archRotate: -6, archY: 130 },
+} as const;
+
+const v = variants[variant];
+---
+
+<figure
+  class="portrait"
+  data-temporary-asset="true"
+  data-priority={priority}
+  style={`aspect-ratio:${ratio === '1:1' ? '1/1' : '4/5'}`}
+>
+  <svg
+    viewBox={`0 0 ${dims.w} ${dims.h}`}
+    role="img"
+    aria-label={alt}
+    preserveAspectRatio="xMidYMid slice"
+  >
+    <rect width={dims.w} height={dims.h} fill="#F2ECDF" />
+    <ellipse
+      cx={v.cx}
+      cy={v.cy}
+      rx={v.rx}
+      ry={v.ry}
+      fill="#E7DFCD"
+      opacity="0.9"
+    />
+    <path
+      d={`M ${v.cx - v.rx * 0.7} ${v.archY} A ${v.rx * 0.9} ${v.rx * 0.9} 0 0 1 ${v.cx + v.rx * 0.7} ${v.archY}`}
+      fill="none"
+      stroke="#8F6D34"
+      stroke-width="1.5"
+      opacity="0.55"
+      transform={`rotate(${v.archRotate} ${v.cx} ${v.archY})`}
+    />
+    <rect x="0.5" y="0.5" width={dims.w - 1} height={dims.h - 1} fill="none" stroke="#E7DFCD" stroke-width="1" />
+  </svg>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .portrait {
+    margin: 0;
+    width: 100%;
+    background: var(--paper);
+    overflow: hidden;
+  }
+
+  .portrait svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .portrait figcaption {
+    margin-top: var(--space-1);
+    font-family: var(--font-body);
+    font-size: var(--text-caption);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-muted);
+  }
+</style>

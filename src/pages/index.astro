@@ -1,0 +1,17 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import BookFeatureCompact from '../components/BookFeatureCompact.astro';
+import PortraitMoment from '../components/PortraitMoment.astro';
+import { PERSON_JSON_LD } from '../lib/site';
+---
+
+<BaseLayout
+  title="Loren Muse"
+  description="Loren Muse — author, digital personality, and writer of She Lived Here, Apparently."
+  jsonLd={[PERSON_JSON_LD]}
+>
+  <Hero />
+  <BookFeatureCompact />
+  <PortraitMoment />
+</BaseLayout>

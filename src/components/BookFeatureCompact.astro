@@ -1,0 +1,87 @@
+---
+import BookCover from './BookCover.astro';
+---
+
+<section class="book-feature" aria-labelledby="book-feature-title">
+  <div class="wrap inner">
+    <div class="cover">
+      <BookCover size="compact" />
+    </div>
+    <div class="copy">
+      <span class="rule" aria-hidden="true"></span>
+      <h2 id="book-feature-title">She Lived Here, Apparently</h2>
+      <p class="prose">
+        A contemporary comedy about property, influencers, social media and the
+        increasingly complicated business of appearing real.
+      </p>
+      <a class="text-link" href="/book">Discover the book</a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .book-feature {
+    padding-block: var(--space-7);
+    border-block: 1px solid var(--hairline);
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    gap: var(--space-5);
+  }
+
+  .inner > * {
+    min-width: 0;
+  }
+
+  .cover {
+    width: 150px;
+    flex: 0 0 auto;
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    border-left: 1px solid var(--hairline);
+    padding-left: var(--space-5);
+  }
+
+  .rule {
+    display: block;
+    width: 2.25rem;
+    height: 1px;
+    background: var(--brass);
+  }
+
+  .book-feature h2 {
+    font-size: var(--text-h2);
+    font-style: italic;
+  }
+
+  .copy p {
+    font-size: var(--text-small);
+    color: var(--ink-muted);
+    max-width: 44ch;
+  }
+
+  @media (max-width: 640px) {
+    .inner {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--space-3);
+    }
+
+    .cover {
+      width: 130px;
+    }
+
+    .copy {
+      border-left: none;
+      border-top: 1px solid var(--hairline);
+      padding-left: 0;
+      padding-top: var(--space-3);
+    }
+  }
+</style>

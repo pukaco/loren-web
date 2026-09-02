@@ -1,0 +1,51 @@
+---
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import '../styles/tokens.css';
+
+interface Props {
+  title: string;
+  description: string;
+  jsonLd?: Record<string, unknown>[];
+}
+
+const { title, description, jsonLd = [] } = Astro.props;
+
+const canonicalUrl = new URL(Astro.url.pathname, Astro.site);
+const pageTitle = title === 'Loren Muse' ? title : `${title} — Loren Muse`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalUrl} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Loren Muse" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+
+    <meta name="generator" content={Astro.generator} />
+
+    {jsonLd.map((entry) => (
+      <script type="application/ld+json" set:html={JSON.stringify(entry)} is:inline />
+    ))}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+  </body>
+</html>

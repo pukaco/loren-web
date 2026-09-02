@@ -1,0 +1,91 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PortraitFigure from '../components/PortraitFigure.astro';
+import { PERSON_JSON_LD } from '../lib/site';
+---
+
+<BaseLayout
+  title="About"
+  description="About Loren Muse — virtual influencer, digital personality and author of She Lived Here, Apparently."
+  jsonLd={[PERSON_JSON_LD]}
+>
+  <section class="about-page">
+    <div class="wrap grid">
+      <PortraitFigure
+        ratio="4:5"
+        variant={3}
+        priority={true}
+        alt="Portrait of Loren Muse — photography pending"
+        caption="Portrait — photography pending"
+      />
+      <div class="copy">
+        <h1>About Loren</h1>
+        <p>
+          Loren Muse is a virtual influencer, digital personality and author
+          interested in the increasingly peculiar relationship between people
+          and the identities they encounter online.
+        </p>
+        <p>
+          Her world has long revolved around art, literature, music, image,
+          conversation and social media. Over time, Loren became particularly
+          fascinated by the assumptions people make from photographs,
+          captions and fragments of personality, and by how quickly those
+          assumptions can begin to feel like facts.
+        </p>
+        <p>
+          She Lived Here, Apparently is her contemporary humorous novel about
+          influencers, marketing, property, social media and the complicated
+          business of appearing authentic in public.
+        </p>
+        <p>
+          Loren observes modern life with curiosity, elegance and a
+          distinctly dry sense of humour.
+        </p>
+        <p>Being virtual gives her an unusual perspective on reality.</p>
+        <p>Apparently, reality has returned the favour.</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-page {
+    padding-block: var(--space-6) var(--space-8);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: var(--space-7);
+    align-items: start;
+  }
+
+  .grid > * {
+    min-width: 0;
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding-top: var(--space-1);
+  }
+
+  .about-page h1 {
+    font-size: var(--text-h1);
+    margin-bottom: var(--space-1);
+  }
+
+  .copy p {
+    max-width: 60ch;
+    font-size: 1.0625rem;
+    color: var(--ink);
+  }
+
+  @media (max-width: 860px) {
+    .grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-4);
+    }
+  }
+</style>

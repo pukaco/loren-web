@@ -1,0 +1,66 @@
+---
+import { INSTAGRAM_URL } from '../lib/site';
+---
+
+<footer class="site-footer">
+  <div class="wrap bar">
+    <p>&copy; 2026 Loren Muse</p>
+    <nav aria-label="Footer">
+      <ul>
+        <li>
+          <a href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer">
+            Instagram<span class="visually-hidden"> (opens in a new tab)</span>
+          </a>
+        </li>
+        <li><a href="/privacy">Privacy</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--hairline);
+    margin-top: var(--space-8);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-4);
+    padding-block: var(--space-4);
+  }
+
+  .site-footer p {
+    font-size: var(--text-small);
+    color: var(--ink-muted);
+  }
+
+  .site-footer ul {
+    list-style: none;
+    display: flex;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-footer a {
+    font-size: var(--text-small);
+    color: var(--ink-muted);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .site-footer a:hover,
+  .site-footer a:focus-visible {
+    color: var(--brass);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-footer a {
+      transition: none;
+    }
+  }
+</style>

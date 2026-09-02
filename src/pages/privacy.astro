@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Privacy"
+  description="Privacy at lorenmuse.com — no analytics, no advertising trackers, no non-essential cookies."
+>
+  <section class="privacy-page">
+    <div class="wrap inner">
+      <h1>Privacy</h1>
+      <p>
+        This website does not use analytics, advertising trackers or
+        non-essential cookies. It has no contact forms or mailing list.
+        Instagram is provided as a standard outbound link and is not
+        embedded on this website.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .privacy-page {
+    padding-block: var(--space-8) var(--space-9);
+  }
+
+  .inner {
+    max-width: 60ch;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .privacy-page h1 {
+    font-size: var(--text-h1);
+    margin-bottom: var(--space-1);
+  }
+
+  .privacy-page p {
+    font-size: 1.0625rem;
+    color: var(--ink);
+  }
+</style>
