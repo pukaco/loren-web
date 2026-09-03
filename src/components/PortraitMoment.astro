@@ -30,6 +30,8 @@ import PortraitFigure from './PortraitFigure.astro';
 
 <style>
   .moment {
+    position: relative;
+    overflow: hidden;
     padding-block: var(--space-8);
   }
 
@@ -52,6 +54,10 @@ import PortraitFigure from './PortraitFigure.astro';
     position: relative;
     display: grid;
     grid-template-columns: 1fr;
+  }
+
+  .grid > * {
+    min-width: 0;
   }
 
   .ghost-line {
